@@ -1,0 +1,417 @@
+{
+  "generated_at": "2026-11-23T15:41:26.323349+00:00",
+  "summary": {
+    "total_catalog_skus": 38,
+    "in_stock_skus": 22,
+    "out_of_stock_skus": 16,
+    "stockout_rate_pct": 42.11,
+    "unique_active_ingredients_affected": 14,
+    "avg_reference_price_from_oos": 130.48,
+    "avg_reference_price_to_oos": 106.64,
+    "high_priority_opportunities": 13
+  },
+  "by_category": [
+    {
+      "category": "Dermocosméticos",
+      "total_skus": 12,
+      "out_of_stock_skus": 5,
+      "stockout_rate_pct": 41.67,
+      "avg_reference_price_from": 307.72,
+      "avg_reference_price_to": 267.94
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "total_skus": 15,
+      "out_of_stock_skus": 7,
+      "stockout_rate_pct": 46.67,
+      "avg_reference_price_from": 35.64,
+      "avg_reference_price_to": 22.33
+    },
+    {
+      "category": "Vitaminas",
+      "total_skus": 11,
+      "out_of_stock_skus": 4,
+      "stockout_rate_pct": 36.36,
+      "avg_reference_price_from": 74.9,
+      "avg_reference_price_to": 52.55
+    }
+  ],
+  "opportunities_by_active_ingredient": [
+    {
+      "category": "Vitaminas",
+      "active_ingredient": "Colecalciferol (Vitamina D3)",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 2,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 67.4,
+      "avg_reference_price_to": 47.7,
+      "avg_discount_pct_before_stockout": 31.95,
+      "products": [
+        {
+          "sku": "ADH-VITD-7000-30",
+          "product_name": "Addera D3 7000UI - 30 Comprimidos Revestidos - Hypera",
+          "brand": "Addera",
+          "dosage_raw": "7000UI",
+          "dosage_mg": null,
+          "package_units": 30,
+          "reference_price_from": 89.9,
+          "reference_price_to": 68.5,
+          "discount_pct": 23.8,
+          "availability_raw": "Indisponível",
+          "product_url": "http://127.0.0.1:56818/produto/addera-d3-7000ui-30-comprimidos"
+        },
+        {
+          "sku": "LAV-VITD-2000-60",
+          "product_name": "Vitamina D3 2000UI - 60 Cápsulas Gelatinosas - Lavitan",
+          "brand": "Lavitan",
+          "dosage_raw": "2000UI",
+          "dosage_mg": null,
+          "package_units": 60,
+          "reference_price_from": 44.9,
+          "reference_price_to": 26.9,
+          "discount_pct": 40.09,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/vitamina-d3-2000ui-60-capsulas-lavitan"
+        }
+      ]
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "active_ingredient": "Dipirona Monoidratada",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 2,
+      "competitor_in_stock_alternatives": 1,
+      "avg_reference_price_from": 18.75,
+      "avg_reference_price_to": 12.45,
+      "avg_discount_pct_before_stockout": 34.68,
+      "products": [
+        {
+          "sku": "EMS-DIP-1G-10",
+          "product_name": "Dipirona Monoidratada 1g - 10 Comprimidos - EMS - Genérico",
+          "brand": "EMS",
+          "dosage_raw": "1g",
+          "dosage_mg": 1000.0,
+          "package_units": 10,
+          "reference_price_from": 22.5,
+          "reference_price_to": 15.9,
+          "discount_pct": 29.33,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/dipirona-monoidratada-1g-10-comprimidos-ems"
+        },
+        {
+          "sku": "NEQ-DIP-500ML-20",
+          "product_name": "Dipirona Monoidratada 500mg/ml Solução Oral Gotas 20ml - Neo Química - Genérico",
+          "brand": "Neo Química",
+          "dosage_raw": "500mg/ml",
+          "dosage_mg": 500.0,
+          "package_units": null,
+          "reference_price_from": 14.99,
+          "reference_price_to": 8.99,
+          "discount_pct": 40.03,
+          "availability_raw": "Indisponível",
+          "product_url": "http://127.0.0.1:56818/produto/dipirona-monoidratada-500mg-ml-gotas-20ml-neo-quimica"
+        }
+      ]
+    },
+    {
+      "category": "Dermocosméticos",
+      "active_ingredient": "Vitamina C 15% + Vitamina E + Ácido Ferúlico",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 1099.0,
+      "avg_reference_price_to": 989.1,
+      "avg_discount_pct_before_stockout": 10.0,
+      "products": [
+        {
+          "sku": "SKI-CEF-30ML",
+          "product_name": "Sérum Antioxidante C E Ferulic 30ml - SkinCeuticals",
+          "brand": "SkinCeuticals",
+          "dosage_raw": null,
+          "dosage_mg": null,
+          "package_units": null,
+          "reference_price_from": 1099.0,
+          "reference_price_to": 989.1,
+          "discount_pct": 10.0,
+          "availability_raw": "Indisponível",
+          "product_url": "http://127.0.0.1:56818/produto/serum-ce-ferulic-30ml-skinceuticals"
+        }
+      ]
+    },
+    {
+      "category": "Dermocosméticos",
+      "active_ingredient": "Filtro Solar FPS 60 + Ácido Hialurônico",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 119.9,
+      "avg_reference_price_to": 95.9,
+      "avg_discount_pct_before_stockout": 20.02,
+      "products": [
+        {
+          "sku": "ISD-FUS-60-50ML",
+          "product_name": "Protetor Solar Facial Fusion Water Oil Control FPS 60 50ml - ISDIN",
+          "brand": "ISDIN",
+          "dosage_raw": null,
+          "dosage_mg": null,
+          "package_units": null,
+          "reference_price_from": 119.9,
+          "reference_price_to": 95.9,
+          "discount_pct": 20.02,
+          "availability_raw": "Indisponível",
+          "product_url": "http://127.0.0.1:56818/produto/protetor-solar-fusion-water-fps60-50ml-isdin"
+        }
+      ]
+    },
+    {
+      "category": "Dermocosméticos",
+      "active_ingredient": "Ácido Salicílico 2% + LHA",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 119.9,
+      "avg_reference_price_to": 94.9,
+      "avg_discount_pct_before_stockout": 20.85,
+      "products": [
+        {
+          "sku": "LRP-EFF-300G",
+          "product_name": "Gel de Limpeza Facial Effaclar Concentrado 300g - La Roche-Posay",
+          "brand": "La Roche-Posay",
+          "dosage_raw": null,
+          "dosage_mg": null,
+          "package_units": null,
+          "reference_price_from": 119.9,
+          "reference_price_to": 94.9,
+          "discount_pct": 20.85,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/gel-limpeza-effaclar-concentrado-300g-la-roche-posay"
+        }
+      ]
+    },
+    {
+      "category": "Dermocosméticos",
+      "active_ingredient": "Filtro Solar FPS 70 + Airlicium",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 109.9,
+      "avg_reference_price_to": 87.9,
+      "avg_discount_pct_before_stockout": 20.02,
+      "products": [
+        {
+          "sku": "LRP-ANT-70-40G",
+          "product_name": "Protetor Solar Facial Anthelios Airlicium FPS 70 40g - La Roche-Posay",
+          "brand": "La Roche-Posay",
+          "dosage_raw": null,
+          "dosage_mg": null,
+          "package_units": null,
+          "reference_price_from": 109.9,
+          "reference_price_to": 87.9,
+          "discount_pct": 20.02,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/protetor-solar-anthelios-airlicium-fps70-40g-la-roche-posay"
+        }
+      ]
+    },
+    {
+      "category": "Vitaminas",
+      "active_ingredient": "Creatina Monohidratada",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 114.9,
+      "avg_reference_price_to": 79.9,
+      "avg_discount_pct_before_stockout": 30.46,
+      "products": [
+        {
+          "sku": "BIO-CRE-300G",
+          "product_name": "Creatina Monohidratada 300g Pote - Integralmedica",
+          "brand": "Integralmedica",
+          "dosage_raw": null,
+          "dosage_mg": null,
+          "package_units": null,
+          "reference_price_from": 114.9,
+          "reference_price_to": 79.9,
+          "discount_pct": 30.46,
+          "availability_raw": "Produto esgotado",
+          "product_url": "http://127.0.0.1:56818/produto/creatina-monohidratada-300g-integralmedica"
+        }
+      ]
+    },
+    {
+      "category": "Dermocosméticos",
+      "active_ingredient": "Filtro Solar FPS 60",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 89.9,
+      "avg_reference_price_to": 71.9,
+      "avg_discount_pct_before_stockout": 20.02,
+      "products": [
+        {
+          "sku": "MAN-EPI-60G",
+          "product_name": "Protetor Solar Episol Sec OC FPS 60 60g - Mantecorp Skincare",
+          "brand": "Mantecorp Skincare",
+          "dosage_raw": null,
+          "dosage_mg": null,
+          "package_units": null,
+          "reference_price_from": 89.9,
+          "reference_price_to": 71.9,
+          "discount_pct": 20.02,
+          "availability_raw": "Produto esgotado",
+          "product_url": "http://127.0.0.1:56818/produto/protetor-solar-episol-sec-oc-fps60-60g-mantecorp"
+        }
+      ]
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "active_ingredient": "Amoxicilina + Clavulanato",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 78.9,
+      "avg_reference_price_to": 52.9,
+      "avg_discount_pct_before_stockout": 32.95,
+      "products": [
+        {
+          "sku": "MED-AMO-875-14",
+          "product_name": "Amoxicilina 875mg + Clavulanato de Potássio 125mg - 14 Comprimidos - Medley - Genérico",
+          "brand": "Medley",
+          "dosage_raw": "875mg",
+          "dosage_mg": 875.0,
+          "package_units": 14,
+          "reference_price_from": 78.9,
+          "reference_price_to": 52.9,
+          "discount_pct": 32.95,
+          "availability_raw": "Produto esgotado",
+          "product_url": "http://127.0.0.1:56818/produto/amoxicilina-875mg-clavulanato-14-comprimidos-medley"
+        }
+      ]
+    },
+    {
+      "category": "Vitaminas",
+      "active_ingredient": "Magnésio Dimalato",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 49.9,
+      "avg_reference_price_to": 34.9,
+      "avg_discount_pct_before_stockout": 30.06,
+      "products": [
+        {
+          "sku": "LAV-MAG-350-60",
+          "product_name": "Magnésio Dimalato 350mg - 60 Cápsulas - Lavitan",
+          "brand": "Lavitan",
+          "dosage_raw": "350mg",
+          "dosage_mg": 350.0,
+          "package_units": 60,
+          "reference_price_from": 49.9,
+          "reference_price_to": 34.9,
+          "discount_pct": 30.06,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/magnesio-dimalato-350mg-60-capsulas-lavitan"
+        }
+      ]
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "active_ingredient": "Amoxicilina",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 36.9,
+      "avg_reference_price_to": 24.5,
+      "avg_discount_pct_before_stockout": 33.6,
+      "products": [
+        {
+          "sku": "ACH-AMO-500-21",
+          "product_name": "Amoxicilina 500mg - 21 Cápsulas - Aché - Genérico",
+          "brand": "Aché",
+          "dosage_raw": "500mg",
+          "dosage_mg": 500.0,
+          "package_units": 21,
+          "reference_price_from": 36.9,
+          "reference_price_to": 24.5,
+          "discount_pct": 33.6,
+          "availability_raw": "Indisponível",
+          "product_url": "http://127.0.0.1:56818/produto/amoxicilina-500mg-21-capsulas-ache"
+        }
+      ]
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "active_ingredient": "Azitromicina",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 34.9,
+      "avg_reference_price_to": 21.9,
+      "avg_discount_pct_before_stockout": 37.25,
+      "products": [
+        {
+          "sku": "MED-AZI-500-5",
+          "product_name": "Azitromicina Di-hidratada 500mg - 5 Comprimidos Revestidos - Medley - Genérico",
+          "brand": "Medley",
+          "dosage_raw": "500mg",
+          "dosage_mg": 500.0,
+          "package_units": 5,
+          "reference_price_from": 34.9,
+          "reference_price_to": 21.9,
+          "discount_pct": 37.25,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/azitromicina-500mg-5-comprimidos-medley"
+        }
+      ]
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "active_ingredient": "Sinvastatina",
+      "opportunity_priority": "HIGH",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 0,
+      "avg_reference_price_from": 31.4,
+      "avg_reference_price_to": 17.9,
+      "avg_discount_pct_before_stockout": 42.99,
+      "products": [
+        {
+          "sku": "EMS-SIM-20-30",
+          "product_name": "Sinvastatina 20mg - 30 Comprimidos Revestidos - EMS - Genérico",
+          "brand": "EMS",
+          "dosage_raw": "20mg",
+          "dosage_mg": 20.0,
+          "package_units": 30,
+          "reference_price_from": 31.4,
+          "reference_price_to": 17.9,
+          "discount_pct": 42.99,
+          "availability_raw": "Temporariamente fora de estoque",
+          "product_url": "http://127.0.0.1:56818/produto/sinvastatina-20mg-30-comprimidos-ems"
+        }
+      ]
+    },
+    {
+      "category": "Medicamentos Genéricos",
+      "active_ingredient": "Losartana Potássica",
+      "opportunity_priority": "MEDIUM",
+      "out_of_stock_skus": 1,
+      "competitor_in_stock_alternatives": 1,
+      "avg_reference_price_from": 29.9,
+      "avg_reference_price_to": 14.2,
+      "avg_discount_pct_before_stockout": 52.51,
+      "products": [
+        {
+          "sku": "EMS-LOS-50-30",
+          "product_name": "Losartana Potássica 50mg c/ 30 Comprimidos Revestidos - EMS - Genérico",
+          "brand": "EMS",
+          "dosage_raw": "50mg",
+          "dosage_mg": 50.0,
+          "package_units": 30,
+          "reference_price_from": 29.9,
+          "reference_price_to": 14.2,
+          "discount_pct": 52.51,
+          "availability_raw": "Avise-me quando chegar",
+          "product_url": "http://127.0.0.1:56818/produto/losartana-potassica-50mg-30-comprimidos-ems"
+        }
+      ]
+    }
+  ]
+}

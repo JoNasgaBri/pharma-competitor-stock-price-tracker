@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Competitor Stockout &amp; Pricing Intelligence Report</title>
+<style>
+  :root {
+    --bg: #f8fafc;
+    --surface: #ffffff;
+    --border: #e2e8f0;
+    --text: #0f172a;
+    --muted: #64748b;
+    --primary: #0f766e;
+    --primary-soft: #ccfbf1;
+    --danger: #dc2626;
+    --danger-soft: #fee2e2;
+    --warn: #d97706;
+    --warn-soft: #fef3c7;
+    --ok: #15803d;
+    --ok-soft: #dcfce7;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .container {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 32px 24px 56px;
+  }
+  header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .eyebrow {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--primary);
+    margin-bottom: 6px;
+  }
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    margin: 6px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .timestamp {
+    font-size: 12px;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px 20px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+  .kpi-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+  }
+  .kpi-value {
+    font-size: 30px;
+    font-weight: 800;
+    margin-top: 6px;
+    letter-spacing: -0.02em;
+  }
+  .kpi-value.danger { color: var(--danger); }
+  .kpi-value.primary { color: var(--primary); }
+  .kpi-foot {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+  }
+  .section h2 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-desc {
+    margin: 0 0 18px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .cat-row { margin-bottom: 16px; }
+  .cat-row:last-child { margin-bottom: 0; }
+  .cat-header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .cat-name { font-weight: 700; }
+  .cat-metrics { color: var(--muted); font-size: 13px; }
+  .cat-metrics strong { color: var(--text); }
+  .bar-track {
+    height: 12px;
+    background: var(--ok-soft);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+  .bar-fill-oos {
+    height: 100%;
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+    border-radius: 999px;
+  }
+  .cat-sub {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .opp-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+    gap: 16px;
+  }
+  .opp-card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    background: #fcfdff;
+  }
+  .opp-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .opp-cat {
+    font-size: 11px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .opp-title {
+    margin: 0 0 4px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .opp-meta {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+  .zero-alt { color: var(--danger); font-weight: 600; }
+  .has-alt { color: var(--warn); font-weight: 600; }
+  .opp-pricing {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border);
+  }
+  .opp-pricing .lbl {
+    display: block;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .opp-pricing .val {
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    padding: 3px 8px;
+    border-radius: 999px;
+  }
+  .badge-high { background: var(--danger-soft); color: var(--danger); }
+  .badge-med { background: var(--warn-soft); color: var(--warn); }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .toolbar input, .toolbar select {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 13px;
+    background: var(--surface);
+    color: var(--text);
+  }
+  .toolbar input { flex: 1; min-width: 220px; }
+  .table-wrap { overflow-x: auto; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+  }
+  th {
+    text-align: left;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    padding: 10px 8px;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+  }
+  td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:hover td { background: #f8fafc; }
+  .sku {
+    font-size: 11px;
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .prod-name { font-weight: 600; }
+  .prod-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    background: #f1f5f9;
+    color: #334155;
+    padding: 2px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .status-oos {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--danger-soft);
+    color: var(--danger);
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+  }
+  .num { text-align: right; white-space: nowrap; }
+  .muted { color: var(--muted); }
+  .strong { font-weight: 700; color: var(--text); }
+  .accent { font-weight: 700; color: var(--primary); }
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <div class="eyebrow">Pharmacy Competitive Intelligence</div>
+        <h1>Competitor Price &amp; Stockout Monitor</h1>
+        <p class="subtitle">
+          Automated out-of-stock alerts, active-ingredient coverage gaps, and pre-stockout reference pricing.
+        </p>
+      </div>
+      <div class="timestamp">Generated: 2026-11-23 15:41:26 UTC</div>
+    </header>
+
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Tracked Catalog SKUs</div>
+        <div class="kpi-value">38</div>
+        <div class="kpi-foot">22 in stock &middot; deduplicated by SKU &amp; URL</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Competitor Stockouts</div>
+        <div class="kpi-value danger">16</div>
+        <div class="kpi-foot">42.11% overall stockout rate</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">High-Priority Molecules</div>
+        <div class="kpi-value primary">13</div>
+        <div class="kpi-foot">14 active ingredients affected</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg Cash Price (OOS)</div>
+        <div class="kpi-value">R$ 106,64</div>
+        <div class="kpi-foot">Catalog avg real discount: 27.6%</div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>Stockout Rate by Category</h2>
+      <p class="section-desc">Red segments show the percentage of tracked SKUs currently unavailable at the competitor.</p>
+      
+            <div class="cat-row">
+                <div class="cat-header">
+                    <span class="cat-name">Dermocosméticos</span>
+                    <span class="cat-metrics">
+                        <strong>5</strong>/12 OOS (41.7%) &middot; Avg OOS Price: <strong>R$ 267,94</strong>
+                    </span>
+                </div>
+                <div class="bar-track" role="img" aria-label="Dermocosméticos: 41.7% out of stock">
+                    <div class="bar-fill-oos" style="width: 41.7%"></div>
+                </div>
+                <div class="cat-sub">
+                    <span>In stock: 7</span>
+                    <span>Out of stock: 5</span>
+                </div>
+            </div>
+            
+            <div class="cat-row">
+                <div class="cat-header">
+                    <span class="cat-name">Medicamentos Genéricos</span>
+                    <span class="cat-metrics">
+                        <strong>7</strong>/15 OOS (46.7%) &middot; Avg OOS Price: <strong>R$ 22,33</strong>
+                    </span>
+                </div>
+                <div class="bar-track" role="img" aria-label="Medicamentos Genéricos: 46.7% out of stock">
+                    <div class="bar-fill-oos" style="width: 46.7%"></div>
+                </div>
+                <div class="cat-sub">
+                    <span>In stock: 8</span>
+                    <span>Out of stock: 7</span>
+                </div>
+            </div>
+            
+            <div class="cat-row">
+                <div class="cat-header">
+                    <span class="cat-name">Vitaminas</span>
+                    <span class="cat-metrics">
+                        <strong>4</strong>/11 OOS (36.4%) &middot; Avg OOS Price: <strong>R$ 52,55</strong>
+                    </span>
+                </div>
+                <div class="bar-track" role="img" aria-label="Vitaminas: 36.4% out of stock">
+                    <div class="bar-fill-oos" style="width: 36.4%"></div>
+                </div>
+                <div class="cat-sub">
+                    <span>In stock: 7</span>
+                    <span>Out of stock: 4</span>
+                </div>
+            </div>
+            
+    </section>
+
+    <section class="section">
+      <h2>Top Commercial Capture Opportunities</h2>
+      <p class="section-desc">Prioritized by active ingredients where the competitor has zero in-stock substitutes, multiple stockouts, or high ticket value.</p>
+      <div class="opp-grid">
+        
+            <div class="opp-card">
+                <div class="opp-top">
+                    <span class="badge badge-high">HIGH PRIORITY</span>
+                    <span class="opp-cat">Vitaminas</span>
+                </div>
+                <h3 class="opp-title">Colecalciferol (Vitamina D3)</h3>
+                <div class="opp-meta">2 OOS SKU(s) &middot; <span class="zero-alt">0 competitor substitutes in stock</span></div>
+                <div class="opp-pricing">
+                    <div>
+                        <span class="lbl">Avg List ("De")</span>
+                        <span class="val muted">R$ 67,40</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Avg Cash ("Por")</span>
+                        <span class="val strong">R$ 47,70</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Prior Discount</span>
+                        <span class="val accent">31.9%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="opp-card">
+                <div class="opp-top">
+                    <span class="badge badge-high">HIGH PRIORITY</span>
+                    <span class="opp-cat">Medicamentos Genéricos</span>
+                </div>
+                <h3 class="opp-title">Dipirona Monoidratada</h3>
+                <div class="opp-meta">2 OOS SKU(s) &middot; <span class="has-alt">1 substitute SKU(s) left</span></div>
+                <div class="opp-pricing">
+                    <div>
+                        <span class="lbl">Avg List ("De")</span>
+                        <span class="val muted">R$ 18,75</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Avg Cash ("Por")</span>
+                        <span class="val strong">R$ 12,45</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Prior Discount</span>
+                        <span class="val accent">34.7%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="opp-card">
+                <div class="opp-top">
+                    <span class="badge badge-high">HIGH PRIORITY</span>
+                    <span class="opp-cat">Dermocosméticos</span>
+                </div>
+                <h3 class="opp-title">Vitamina C 15% + Vitamina E + Ácido Ferúlico</h3>
+                <div class="opp-meta">1 OOS SKU(s) &middot; <span class="zero-alt">0 competitor substitutes in stock</span></div>
+                <div class="opp-pricing">
+                    <div>
+                        <span class="lbl">Avg List ("De")</span>
+                        <span class="val muted">R$ 1.099,00</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Avg Cash ("Por")</span>
+                        <span class="val strong">R$ 989,10</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Prior Discount</span>
+                        <span class="val accent">10.0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="opp-card">
+                <div class="opp-top">
+                    <span class="badge badge-high">HIGH PRIORITY</span>
+                    <span class="opp-cat">Dermocosméticos</span>
+                </div>
+                <h3 class="opp-title">Filtro Solar FPS 60 + Ácido Hialurônico</h3>
+                <div class="opp-meta">1 OOS SKU(s) &middot; <span class="zero-alt">0 competitor substitutes in stock</span></div>
+                <div class="opp-pricing">
+                    <div>
+                        <span class="lbl">Avg List ("De")</span>
+                        <span class="val muted">R$ 119,90</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Avg Cash ("Por")</span>
+                        <span class="val strong">R$ 95,90</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Prior Discount</span>
+                        <span class="val accent">20.0%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="opp-card">
+                <div class="opp-top">
+                    <span class="badge badge-high">HIGH PRIORITY</span>
+                    <span class="opp-cat">Dermocosméticos</span>
+                </div>
+                <h3 class="opp-title">Ácido Salicílico 2% + LHA</h3>
+                <div class="opp-meta">1 OOS SKU(s) &middot; <span class="zero-alt">0 competitor substitutes in stock</span></div>
+                <div class="opp-pricing">
+                    <div>
+                        <span class="lbl">Avg List ("De")</span>
+                        <span class="val muted">R$ 119,90</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Avg Cash ("Por")</span>
+                        <span class="val strong">R$ 94,90</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Prior Discount</span>
+                        <span class="val accent">20.9%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="opp-card">
+                <div class="opp-top">
+                    <span class="badge badge-high">HIGH PRIORITY</span>
+                    <span class="opp-cat">Dermocosméticos</span>
+                </div>
+                <h3 class="opp-title">Filtro Solar FPS 70 + Airlicium</h3>
+                <div class="opp-meta">1 OOS SKU(s) &middot; <span class="zero-alt">0 competitor substitutes in stock</span></div>
+                <div class="opp-pricing">
+                    <div>
+                        <span class="lbl">Avg List ("De")</span>
+                        <span class="val muted">R$ 109,90</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Avg Cash ("Por")</span>
+                        <span class="val strong">R$ 87,90</span>
+                    </div>
+                    <div>
+                        <span class="lbl">Prior Discount</span>
+                        <span class="val accent">20.0%</span>
+                    </div>
+                </div>
+            </div>
+            
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>All Out-of-Stock Competitor SKUs</h2>
+      <p class="section-desc">Filter by category, priority, brand, SKU, or active ingredient to plan targeted ad campaigns and generic repricing.</p>
+      <div class="toolbar">
+        <input id="searchInput" type="search" placeholder="Search SKU, product, active ingredient, or brand..." />
+        <select id="categoryFilter">
+          <option value="ALL">All Categories</option>
+          <option value="Dermocosméticos">Dermocosméticos</option>
+<option value="Medicamentos Genéricos">Medicamentos Genéricos</option>
+<option value="Vitaminas">Vitaminas</option>
+        </select>
+        <select id="priorityFilter">
+          <option value="ALL">All Priorities</option>
+          <option value="HIGH">HIGH Priority Only</option>
+          <option value="MEDIUM">MEDIUM Priority Only</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Priority</th>
+              <th>SKU</th>
+              <th>Product &amp; Active Ingredient</th>
+              <th>Category</th>
+              <th>Dosage / Pack</th>
+              <th class="num">List ("De")</th>
+              <th class="num">Cash ("Por")</th>
+              <th class="num">Discount</th>
+              <th class="num">Comp. Alts</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="oosTableBody">
+            
+                <tr data-category="Vitaminas" data-priority="HIGH" data-search="adh-vitd-7000-30 addera d3 7000ui - 30 comprimidos revestidos - hypera addera colecalciferol (vitamina d3) vitaminas high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">ADH-VITD-7000-30</code></td>
+                    <td>
+                        <div class="prod-name">Addera D3 7000UI - 30 Comprimidos Revestidos - Hypera</div>
+                        <div class="prod-sub">Colecalciferol (Vitamina D3) &middot; Addera</div>
+                    </td>
+                    <td><span class="pill">Vitaminas</span></td>
+                    <td>7000UI / 30 un.</td>
+                    <td class="num muted">R$ 89,90</td>
+                    <td class="num strong">R$ 68,50</td>
+                    <td class="num accent">23.8%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Indisponível</span></td>
+                </tr>
+                
+                <tr data-category="Vitaminas" data-priority="HIGH" data-search="lav-vitd-2000-60 vitamina d3 2000ui - 60 cápsulas gelatinosas - lavitan lavitan colecalciferol (vitamina d3) vitaminas high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">LAV-VITD-2000-60</code></td>
+                    <td>
+                        <div class="prod-name">Vitamina D3 2000UI - 60 Cápsulas Gelatinosas - Lavitan</div>
+                        <div class="prod-sub">Colecalciferol (Vitamina D3) &middot; Lavitan</div>
+                    </td>
+                    <td><span class="pill">Vitaminas</span></td>
+                    <td>2000UI / 60 un.</td>
+                    <td class="num muted">R$ 44,90</td>
+                    <td class="num strong">R$ 26,90</td>
+                    <td class="num accent">40.1%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="HIGH" data-search="ems-dip-1g-10 dipirona monoidratada 1g - 10 comprimidos - ems - genérico ems dipirona monoidratada medicamentos genéricos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">EMS-DIP-1G-10</code></td>
+                    <td>
+                        <div class="prod-name">Dipirona Monoidratada 1g - 10 Comprimidos - EMS - Genérico</div>
+                        <div class="prod-sub">Dipirona Monoidratada &middot; EMS</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>1g / 10 un.</td>
+                    <td class="num muted">R$ 22,50</td>
+                    <td class="num strong">R$ 15,90</td>
+                    <td class="num accent">29.3%</td>
+                    <td class="num">1</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="HIGH" data-search="neq-dip-500ml-20 dipirona monoidratada 500mg/ml solução oral gotas 20ml - neo química - genérico neo química dipirona monoidratada medicamentos genéricos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">NEQ-DIP-500ML-20</code></td>
+                    <td>
+                        <div class="prod-name">Dipirona Monoidratada 500mg/ml Solução Oral Gotas 20ml - Neo Química - Genérico</div>
+                        <div class="prod-sub">Dipirona Monoidratada &middot; Neo Química</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>500mg/ml / —</td>
+                    <td class="num muted">R$ 14,99</td>
+                    <td class="num strong">R$ 8,99</td>
+                    <td class="num accent">40.0%</td>
+                    <td class="num">1</td>
+                    <td><span class="status-oos">Indisponível</span></td>
+                </tr>
+                
+                <tr data-category="Dermocosméticos" data-priority="HIGH" data-search="ski-cef-30ml sérum antioxidante c e ferulic 30ml - skinceuticals skinceuticals vitamina c 15% + vitamina e + ácido ferúlico dermocosméticos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">SKI-CEF-30ML</code></td>
+                    <td>
+                        <div class="prod-name">Sérum Antioxidante C E Ferulic 30ml - SkinCeuticals</div>
+                        <div class="prod-sub">Vitamina C 15% + Vitamina E + Ácido Ferúlico &middot; SkinCeuticals</div>
+                    </td>
+                    <td><span class="pill">Dermocosméticos</span></td>
+                    <td>— / —</td>
+                    <td class="num muted">R$ 1.099,00</td>
+                    <td class="num strong">R$ 989,10</td>
+                    <td class="num accent">10.0%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Indisponível</span></td>
+                </tr>
+                
+                <tr data-category="Dermocosméticos" data-priority="HIGH" data-search="isd-fus-60-50ml protetor solar facial fusion water oil control fps 60 50ml - isdin isdin filtro solar fps 60 + ácido hialurônico dermocosméticos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">ISD-FUS-60-50ML</code></td>
+                    <td>
+                        <div class="prod-name">Protetor Solar Facial Fusion Water Oil Control FPS 60 50ml - ISDIN</div>
+                        <div class="prod-sub">Filtro Solar FPS 60 + Ácido Hialurônico &middot; ISDIN</div>
+                    </td>
+                    <td><span class="pill">Dermocosméticos</span></td>
+                    <td>— / —</td>
+                    <td class="num muted">R$ 119,90</td>
+                    <td class="num strong">R$ 95,90</td>
+                    <td class="num accent">20.0%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Indisponível</span></td>
+                </tr>
+                
+                <tr data-category="Dermocosméticos" data-priority="HIGH" data-search="lrp-eff-300g gel de limpeza facial effaclar concentrado 300g - la roche-posay la roche-posay ácido salicílico 2% + lha dermocosméticos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">LRP-EFF-300G</code></td>
+                    <td>
+                        <div class="prod-name">Gel de Limpeza Facial Effaclar Concentrado 300g - La Roche-Posay</div>
+                        <div class="prod-sub">Ácido Salicílico 2% + LHA &middot; La Roche-Posay</div>
+                    </td>
+                    <td><span class="pill">Dermocosméticos</span></td>
+                    <td>— / —</td>
+                    <td class="num muted">R$ 119,90</td>
+                    <td class="num strong">R$ 94,90</td>
+                    <td class="num accent">20.9%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+                <tr data-category="Dermocosméticos" data-priority="HIGH" data-search="lrp-ant-70-40g protetor solar facial anthelios airlicium fps 70 40g - la roche-posay la roche-posay filtro solar fps 70 + airlicium dermocosméticos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">LRP-ANT-70-40G</code></td>
+                    <td>
+                        <div class="prod-name">Protetor Solar Facial Anthelios Airlicium FPS 70 40g - La Roche-Posay</div>
+                        <div class="prod-sub">Filtro Solar FPS 70 + Airlicium &middot; La Roche-Posay</div>
+                    </td>
+                    <td><span class="pill">Dermocosméticos</span></td>
+                    <td>— / —</td>
+                    <td class="num muted">R$ 109,90</td>
+                    <td class="num strong">R$ 87,90</td>
+                    <td class="num accent">20.0%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+                <tr data-category="Vitaminas" data-priority="HIGH" data-search="bio-cre-300g creatina monohidratada 300g pote - integralmedica integralmedica creatina monohidratada vitaminas high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">BIO-CRE-300G</code></td>
+                    <td>
+                        <div class="prod-name">Creatina Monohidratada 300g Pote - Integralmedica</div>
+                        <div class="prod-sub">Creatina Monohidratada &middot; Integralmedica</div>
+                    </td>
+                    <td><span class="pill">Vitaminas</span></td>
+                    <td>— / —</td>
+                    <td class="num muted">R$ 114,90</td>
+                    <td class="num strong">R$ 79,90</td>
+                    <td class="num accent">30.5%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Produto esgotado</span></td>
+                </tr>
+                
+                <tr data-category="Dermocosméticos" data-priority="HIGH" data-search="man-epi-60g protetor solar episol sec oc fps 60 60g - mantecorp skincare mantecorp skincare filtro solar fps 60 dermocosméticos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">MAN-EPI-60G</code></td>
+                    <td>
+                        <div class="prod-name">Protetor Solar Episol Sec OC FPS 60 60g - Mantecorp Skincare</div>
+                        <div class="prod-sub">Filtro Solar FPS 60 &middot; Mantecorp Skincare</div>
+                    </td>
+                    <td><span class="pill">Dermocosméticos</span></td>
+                    <td>— / —</td>
+                    <td class="num muted">R$ 89,90</td>
+                    <td class="num strong">R$ 71,90</td>
+                    <td class="num accent">20.0%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Produto esgotado</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="HIGH" data-search="med-amo-875-14 amoxicilina 875mg + clavulanato de potássio 125mg - 14 comprimidos - medley - genérico medley amoxicilina + clavulanato medicamentos genéricos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">MED-AMO-875-14</code></td>
+                    <td>
+                        <div class="prod-name">Amoxicilina 875mg + Clavulanato de Potássio 125mg - 14 Comprimidos - Medley - Genérico</div>
+                        <div class="prod-sub">Amoxicilina + Clavulanato &middot; Medley</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>875mg / 14 un.</td>
+                    <td class="num muted">R$ 78,90</td>
+                    <td class="num strong">R$ 52,90</td>
+                    <td class="num accent">33.0%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Produto esgotado</span></td>
+                </tr>
+                
+                <tr data-category="Vitaminas" data-priority="HIGH" data-search="lav-mag-350-60 magnésio dimalato 350mg - 60 cápsulas - lavitan lavitan magnésio dimalato vitaminas high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">LAV-MAG-350-60</code></td>
+                    <td>
+                        <div class="prod-name">Magnésio Dimalato 350mg - 60 Cápsulas - Lavitan</div>
+                        <div class="prod-sub">Magnésio Dimalato &middot; Lavitan</div>
+                    </td>
+                    <td><span class="pill">Vitaminas</span></td>
+                    <td>350mg / 60 un.</td>
+                    <td class="num muted">R$ 49,90</td>
+                    <td class="num strong">R$ 34,90</td>
+                    <td class="num accent">30.1%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="HIGH" data-search="ach-amo-500-21 amoxicilina 500mg - 21 cápsulas - aché - genérico aché amoxicilina medicamentos genéricos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">ACH-AMO-500-21</code></td>
+                    <td>
+                        <div class="prod-name">Amoxicilina 500mg - 21 Cápsulas - Aché - Genérico</div>
+                        <div class="prod-sub">Amoxicilina &middot; Aché</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>500mg / 21 un.</td>
+                    <td class="num muted">R$ 36,90</td>
+                    <td class="num strong">R$ 24,50</td>
+                    <td class="num accent">33.6%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Indisponível</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="HIGH" data-search="med-azi-500-5 azitromicina di-hidratada 500mg - 5 comprimidos revestidos - medley - genérico medley azitromicina medicamentos genéricos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">MED-AZI-500-5</code></td>
+                    <td>
+                        <div class="prod-name">Azitromicina Di-hidratada 500mg - 5 Comprimidos Revestidos - Medley - Genérico</div>
+                        <div class="prod-sub">Azitromicina &middot; Medley</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>500mg / 5 un.</td>
+                    <td class="num muted">R$ 34,90</td>
+                    <td class="num strong">R$ 21,90</td>
+                    <td class="num accent">37.2%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="HIGH" data-search="ems-sim-20-30 sinvastatina 20mg - 30 comprimidos revestidos - ems - genérico ems sinvastatina medicamentos genéricos high">
+                    <td><span class="badge badge-high">HIGH</span></td>
+                    <td><code class="sku">EMS-SIM-20-30</code></td>
+                    <td>
+                        <div class="prod-name">Sinvastatina 20mg - 30 Comprimidos Revestidos - EMS - Genérico</div>
+                        <div class="prod-sub">Sinvastatina &middot; EMS</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>20mg / 30 un.</td>
+                    <td class="num muted">R$ 31,40</td>
+                    <td class="num strong">R$ 17,90</td>
+                    <td class="num accent">43.0%</td>
+                    <td class="num">0</td>
+                    <td><span class="status-oos">Temporariamente fora de estoque</span></td>
+                </tr>
+                
+                <tr data-category="Medicamentos Genéricos" data-priority="MEDIUM" data-search="ems-los-50-30 losartana potássica 50mg c/ 30 comprimidos revestidos - ems - genérico ems losartana potássica medicamentos genéricos medium">
+                    <td><span class="badge badge-med">MEDIUM</span></td>
+                    <td><code class="sku">EMS-LOS-50-30</code></td>
+                    <td>
+                        <div class="prod-name">Losartana Potássica 50mg c/ 30 Comprimidos Revestidos - EMS - Genérico</div>
+                        <div class="prod-sub">Losartana Potássica &middot; EMS</div>
+                    </td>
+                    <td><span class="pill">Medicamentos Genéricos</span></td>
+                    <td>50mg / 30 un.</td>
+                    <td class="num muted">R$ 29,90</td>
+                    <td class="num strong">R$ 14,20</td>
+                    <td class="num accent">52.5%</td>
+                    <td class="num">1</td>
+                    <td><span class="status-oos">Avise-me quando chegar</span></td>
+                </tr>
+                
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      Generated automatically by <strong>pharma-competitor-stock-price-tracker</strong> &middot;
+      Data backed by SQLite (<code>data/pharma_catalog.db</code>) &amp; Excel-ready CSV (<code>data/cleaned_pharma_catalog.csv</code>)
+    </footer>
+  </div>
+
+<script>
+  const searchInput = document.getElementById("searchInput");
+  const categoryFilter = document.getElementById("categoryFilter");
+  const priorityFilter = document.getElementById("priorityFilter");
+  const rows = Array.from(document.querySelectorAll("#oosTableBody tr"));
+
+  function applyFilters() {
+    const q = searchInput.value.trim().toLowerCase();
+    const cat = categoryFilter.value;
+    const prio = priorityFilter.value;
+    rows.forEach((row) => {
+      const matchSearch = !q || row.dataset.search.includes(q);
+      const matchCat = cat === "ALL" || row.dataset.category === cat;
+      const matchPrio = prio === "ALL" || row.dataset.priority === prio;
+      row.style.display = (matchSearch && matchCat && matchPrio) ? "" : "none";
+    });
+  }
+
+  searchInput.addEventListener("input", applyFilters);
+  categoryFilter.addEventListener("change", applyFilters);
+  priorityFilter.addEventListener("change", applyFilters);
+</script>
+</body>
+</html>
